@@ -4,7 +4,7 @@ import dl
 import time
 import os
 
-fn get_libname() !string {
+fn get_libname() string {
 	// Check current directory first
 	if os.is_file(dl.get_libname('./libduckdb')) {
 		return dl.get_libname('./libduckdb')
@@ -13,13 +13,21 @@ fn get_libname() !string {
 	if os.is_file(dl.get_libname('${os.getenv('LIBDUCKDB_DIR')}/libduckdb')) {
 		return dl.get_libname('${os.getenv('LIBDUCKDB_DIR')}/libduckdb')
 	}
-	return error('')
+	// Check Homebrew macOS standard locations
+	if os.is_file('/opt/homebrew/opt/duckdb/lib/libduckdb.dylib') {
+		return '/opt/homebrew/opt/duckdb/lib/libduckdb.dylib'
+	}
+	if os.is_file('/opt/homebrew/lib/libduckdb.dylib') {
+		return '/opt/homebrew/lib/libduckdb.dylib'
+	}
+	if os.is_file('/usr/local/lib/libduckdb.dylib') {
+		return '/usr/local/lib/libduckdb.dylib'
+	}
+	// Check system default search
+	return dl.get_libname('libduckdb')
 }
 
-const library_file_path = get_libname() or {
-	println('[ERROR]: No libduckdb library installed. Set LIBDUCKDB_DIR env var to the directory containing libduckdb or put libduckdb in the current directory')
-	exit(1)
-}
+const library_file_path = get_libname()
 const start_date = time.Time{
 	year:  1970
 	month: 1

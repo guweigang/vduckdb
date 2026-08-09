@@ -1,7 +1,7 @@
 module vduckdb
 
 import v.vmod
-import x.json2
+import json2
 import math
 import time
 

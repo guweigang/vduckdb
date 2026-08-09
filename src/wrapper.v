@@ -180,58 +180,58 @@ type FNVersion = fn () &char
 
 
 
-const handle = dl.open_opt(library_file_path, dl.rtld_lazy) or { panic(err) }
-const duckdb_open = FNOpen(dl.sym_opt(handle, 'duckdb_open') or { panic(err) })
-const duckdb_open_ext = FNOpenExt(dl.sym_opt(handle, 'duckdb_open_ext') or { panic(err) })
-const duckdb_connect = FNConnect(dl.sym_opt(handle, 'duckdb_connect') or { panic(err) })
-const duckdb_disconnect = FNDisconnect(dl.sym_opt(handle, 'duckdb_disconnect') or { panic(err) })
-const duckdb_close = FNClose(dl.sym_opt(handle, 'duckdb_close') or { panic(err) })
-const duckdb_query = FNQuery(dl.sym_opt(handle, 'duckdb_query') or { panic(err) })
-const duckdb_row_count = FNCount(dl.sym_opt(handle, 'duckdb_row_count') or { panic(err) })
-const duckdb_column_count = FNCount(dl.sym_opt(handle, 'duckdb_column_count') or { panic(err) })
-const duckdb_column_chars = FNColName(dl.sym_opt(handle, 'duckdb_column_name') or { panic(err) })
-const duckdb_column_type = FNColType(dl.sym_opt(handle, 'duckdb_column_type') or { panic(err) })
+const handle = dl.open_opt(library_file_path, dl.rtld_lazy) or { voidptr(0) }
+const duckdb_open = FNOpen(dl.sym_opt(handle, 'duckdb_open') or { voidptr(0) })
+const duckdb_open_ext = FNOpenExt(dl.sym_opt(handle, 'duckdb_open_ext') or { voidptr(0) })
+const duckdb_connect = FNConnect(dl.sym_opt(handle, 'duckdb_connect') or { voidptr(0) })
+const duckdb_disconnect = FNDisconnect(dl.sym_opt(handle, 'duckdb_disconnect') or { voidptr(0) })
+const duckdb_close = FNClose(dl.sym_opt(handle, 'duckdb_close') or { voidptr(0) })
+const duckdb_query = FNQuery(dl.sym_opt(handle, 'duckdb_query') or { voidptr(0) })
+const duckdb_row_count = FNCount(dl.sym_opt(handle, 'duckdb_row_count') or { voidptr(0) })
+const duckdb_column_count = FNCount(dl.sym_opt(handle, 'duckdb_column_count') or { voidptr(0) })
+const duckdb_column_chars = FNColName(dl.sym_opt(handle, 'duckdb_column_name') or { voidptr(0) })
+const duckdb_column_type = FNColType(dl.sym_opt(handle, 'duckdb_column_type') or { voidptr(0) })
 const duckdb_destroy_result = FNDestroyRes(dl.sym_opt(handle, 'duckdb_destroy_result') or {
-	panic(err)
+	voidptr(0)
 })
 // Returning values
 const duckdb_value_boolean = FNValueBoolean(dl.sym_opt(handle, 'duckdb_value_boolean') or {
-	panic(err)
+	voidptr(0)
 })
-const duckdb_value_int8 = FNValueInt8(dl.sym_opt(handle, 'duckdb_value_int8') or { panic(err) })
-const duckdb_value_int16 = FNValueInt16(dl.sym_opt(handle, 'duckdb_value_int16') or { panic(err) })
-const duckdb_value_int32 = FNValueInt32(dl.sym_opt(handle, 'duckdb_value_int32') or { panic(err) })
-const duckdb_value_int64 = FNValueInt64(dl.sym_opt(handle, 'duckdb_value_int64') or { panic(err) })
-const duckdb_value_float = FNValueFloat(dl.sym_opt(handle, 'duckdb_value_float') or { panic(err) })
+const duckdb_value_int8 = FNValueInt8(dl.sym_opt(handle, 'duckdb_value_int8') or { voidptr(0) })
+const duckdb_value_int16 = FNValueInt16(dl.sym_opt(handle, 'duckdb_value_int16') or { voidptr(0) })
+const duckdb_value_int32 = FNValueInt32(dl.sym_opt(handle, 'duckdb_value_int32') or { voidptr(0) })
+const duckdb_value_int64 = FNValueInt64(dl.sym_opt(handle, 'duckdb_value_int64') or { voidptr(0) })
+const duckdb_value_float = FNValueFloat(dl.sym_opt(handle, 'duckdb_value_float') or { voidptr(0) })
 const duckdb_value_double = FNValueDouble(dl.sym_opt(handle, 'duckdb_value_double') or {
-	panic(err)
+	voidptr(0)
 })
 const duckdb_value_varchar = FNValueVarchar(dl.sym_opt(handle, 'duckdb_value_varchar') or {
-	panic(err)
+	voidptr(0)
 })
-const duckdb_value_str = FNValueString(dl.sym_opt(handle, 'duckdb_value_string') or { panic(err) })
+const duckdb_value_str = FNValueString(dl.sym_opt(handle, 'duckdb_value_string') or { voidptr(0) })
 const duckdb_value_hugeint = FNValueHugeInt(dl.sym_opt(handle, 'duckdb_value_hugeint') or {
-	panic(err)
+	voidptr(0)
 })
 const duckdb_hugeint_to_double = FNValueHugeIntToDouble(dl.sym_opt(handle, 'duckdb_hugeint_to_double') or {
-	panic(err)
+	voidptr(0)
 })
 const duckdb_value_decimal = FNValueDecimal(dl.sym_opt(handle, 'duckdb_value_decimal') or {
-	panic(err)
+	voidptr(0)
 })
-const duckdb_value_dt = FNValueDate(dl.sym_opt(handle, 'duckdb_value_date') or { panic(err) })
-const duckdb_value_time = FNValueTime(dl.sym_opt(handle, 'duckdb_value_time') or { panic(err) })
+const duckdb_value_dt = FNValueDate(dl.sym_opt(handle, 'duckdb_value_date') or { voidptr(0) })
+const duckdb_value_time = FNValueTime(dl.sym_opt(handle, 'duckdb_value_time') or { voidptr(0) })
 const duckdb_value_timestamp = FNValueTimestamp(dl.sym_opt(handle, 'duckdb_value_timestamp') or {
-	panic(err)
+	voidptr(0)
 })
 const duckdb_value_interval = FNValueInterval(dl.sym_opt(handle, 'duckdb_value_interval') or {
-	panic(err)
+	voidptr(0)
 })
 const duckdb_result_error = FNResultError(dl.sym_opt(handle, 'duckdb_result_error') or {
-	panic(err)
+	voidptr(0)
 })
-const duckdb_free = FNVoidPtr(dl.sym_opt(handle, 'duckdb_free') or { panic(err) })
-const duckdb_lib_version = FNVersion(dl.sym_opt(handle, 'duckdb_library_version') or { panic(err) })
+const duckdb_free = FNVoidPtr(dl.sym_opt(handle, 'duckdb_free') or { voidptr(0) })
+const duckdb_lib_version = FNVersion(dl.sym_opt(handle, 'duckdb_library_version') or { voidptr(0) })
 
 // duckdb_value_string retrieves a VARCHAR value from a query result.
 // Returns 'NULL' if the value is nil.

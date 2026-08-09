@@ -1,6 +1,6 @@
 module vduckdb
 
-import x.json2
+import json2
 
 fn test__simple_query() {
 	mut db := DuckDB{}
