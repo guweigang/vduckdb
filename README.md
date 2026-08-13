@@ -50,6 +50,33 @@ fn main() {
 }
 ```
 
+## Native database and prepared statements
+
+Drivers that need multiple connections should open one `NativeDatabase` and
+create every `NativeConnection` from it. This keeps the connections on the same
+DuckDB catalog and buffer manager.
+
+```v
+mut database := vduckdb.open_native_database('analytics.duckdb')!
+defer { database.close() }
+
+mut writer := database.connect()!
+defer { writer.disconnect() }
+mut reader := database.connect()!
+defer { reader.disconnect() }
+
+mut changed := writer.run(
+	'UPDATE categories SET name = ? WHERE category_id = ?',
+	[vduckdb.NativeValue('手机数码1'), vduckdb.NativeValue(i64(1))],
+	map[string]vduckdb.NativeValue{},
+)!
+changed.destroy()
+```
+
+`NativeValue` supports NULL, booleans, signed and unsigned integers, doubles,
+strings, and blobs. It deliberately has no dependency on an application-level
+driver SDK.
+
 ### Working with Query Results
 
 ```v
