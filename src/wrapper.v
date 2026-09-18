@@ -179,99 +179,61 @@ type FNVoidPtr = fn (voidptr)
 type FNVersion = fn () &char
 
 const handle = dl.open_opt(library_file_path, dl.rtld_lazy) or { unsafe { nil } }
-const duckdb_open = FNOpen(dl.sym_opt(handle, 'duckdb_open') or { unsafe { nil } })
-const duckdb_open_ext = FNOpenExt(dl.sym_opt(handle, 'duckdb_open_ext') or { unsafe { nil } })
-const duckdb_connect = FNConnect(dl.sym_opt(handle, 'duckdb_connect') or { unsafe { nil } })
-const duckdb_disconnect = FNDisconnect(dl.sym_opt(handle, 'duckdb_disconnect') or { unsafe { nil } })
-const duckdb_close = FNClose(dl.sym_opt(handle, 'duckdb_close') or { unsafe { nil } })
-const duckdb_query = FNQuery(dl.sym_opt(handle, 'duckdb_query') or { unsafe { nil } })
-const duckdb_row_count = FNCount(dl.sym_opt(handle, 'duckdb_row_count') or { unsafe { nil } })
-const duckdb_column_count = FNCount(dl.sym_opt(handle, 'duckdb_column_count') or { unsafe { nil } })
-const duckdb_column_chars = FNColName(dl.sym_opt(handle, 'duckdb_column_name') or { unsafe { nil } })
-const duckdb_column_type = FNColType(dl.sym_opt(handle, 'duckdb_column_type') or { unsafe { nil } })
-const duckdb_destroy_result = FNDestroyRes(dl.sym_opt(handle, 'duckdb_destroy_result') or {
-	unsafe { nil }
-})
+
+// Keep the handle in a local value: V 0.5.2 otherwise passes the address of
+// this global voidptr to dlsym instead of the dynamic library handle.
+fn load_duckdb_symbol(name string) voidptr {
+	local_handle := handle
+	return dl.sym_opt(local_handle, name) or { unsafe { nil } }
+}
+const duckdb_open = FNOpen(load_duckdb_symbol('duckdb_open'))
+const duckdb_open_ext = FNOpenExt(load_duckdb_symbol('duckdb_open_ext'))
+const duckdb_connect = FNConnect(load_duckdb_symbol('duckdb_connect'))
+const duckdb_disconnect = FNDisconnect(load_duckdb_symbol('duckdb_disconnect'))
+const duckdb_close = FNClose(load_duckdb_symbol('duckdb_close'))
+const duckdb_query = FNQuery(load_duckdb_symbol('duckdb_query'))
+const duckdb_row_count = FNCount(load_duckdb_symbol('duckdb_row_count'))
+const duckdb_column_count = FNCount(load_duckdb_symbol('duckdb_column_count'))
+const duckdb_column_chars = FNColName(load_duckdb_symbol('duckdb_column_name'))
+const duckdb_column_type = FNColType(load_duckdb_symbol('duckdb_column_type'))
+const duckdb_destroy_result = FNDestroyRes(load_duckdb_symbol('duckdb_destroy_result'))
 // Returning values
-const duckdb_value_boolean = FNValueBoolean(dl.sym_opt(handle, 'duckdb_value_boolean') or {
-	unsafe { nil }
-})
-const duckdb_value_int8 = FNValueInt8(dl.sym_opt(handle, 'duckdb_value_int8') or { unsafe { nil } })
-const duckdb_value_int16 = FNValueInt16(dl.sym_opt(handle, 'duckdb_value_int16') or {
-	unsafe { nil }
-})
-const duckdb_value_int32 = FNValueInt32(dl.sym_opt(handle, 'duckdb_value_int32') or {
-	unsafe { nil }
-})
-const duckdb_value_int64 = FNValueInt64(dl.sym_opt(handle, 'duckdb_value_int64') or {
-	unsafe { nil }
-})
-const duckdb_value_float = FNValueFloat(dl.sym_opt(handle, 'duckdb_value_float') or {
-	unsafe { nil }
-})
-const duckdb_value_double = FNValueDouble(dl.sym_opt(handle, 'duckdb_value_double') or {
-	unsafe { nil }
-})
-const duckdb_value_varchar = FNValueVarchar(dl.sym_opt(handle, 'duckdb_value_varchar') or {
-	unsafe { nil }
-})
-const duckdb_value_str = FNValueString(dl.sym_opt(handle, 'duckdb_value_string') or {
-	unsafe { nil }
-})
-const duckdb_value_hugeint = FNValueHugeInt(dl.sym_opt(handle, 'duckdb_value_hugeint') or {
-	unsafe { nil }
-})
-const duckdb_hugeint_to_double = FNValueHugeIntToDouble(dl.sym_opt(handle,
-	'duckdb_hugeint_to_double') or { unsafe { nil } })
-const duckdb_value_decimal = FNValueDecimal(dl.sym_opt(handle, 'duckdb_value_decimal') or {
-	unsafe { nil }
-})
-const duckdb_value_dt = FNValueDate(dl.sym_opt(handle, 'duckdb_value_date') or { unsafe { nil } })
-const duckdb_value_time = FNValueTime(dl.sym_opt(handle, 'duckdb_value_time') or { unsafe { nil } })
-const duckdb_value_timestamp = FNValueTimestamp(dl.sym_opt(handle, 'duckdb_value_timestamp') or {
-	unsafe { nil }
-})
-const duckdb_value_interval = FNValueInterval(dl.sym_opt(handle, 'duckdb_value_interval') or {
-	unsafe { nil }
-})
-const duckdb_result_error = FNResultError(dl.sym_opt(handle, 'duckdb_result_error') or {
-	unsafe { nil }
-})
-const duckdb_free = FNVoidPtr(dl.sym_opt(handle, 'duckdb_free') or { unsafe { nil } })
-const duckdb_lib_version = FNVersion(dl.sym_opt(handle, 'duckdb_library_version') or {
-	unsafe { nil }
-})
-const native_prepare = FNPrepare(dl.sym_opt(handle, 'duckdb_prepare') or { unsafe { nil } })
-const native_destroy_prepare = FNDestroyPrepare(dl.sym_opt(handle, 'duckdb_destroy_prepare') or {
-	unsafe { nil }
-})
-const native_prepare_error = FNPrepareError(dl.sym_opt(handle, 'duckdb_prepare_error') or {
-	unsafe { nil }
-})
-const native_nparams = FNNparams(dl.sym_opt(handle, 'duckdb_nparams') or { unsafe { nil } })
-const native_bind_parameter_index = FNBindParameterIndex(dl.sym_opt(handle,
-	'duckdb_bind_parameter_index') or { unsafe { nil } })
-const native_bind_boolean = FNBindBoolean(dl.sym_opt(handle, 'duckdb_bind_boolean') or {
-	unsafe { nil }
-})
-const native_bind_int64 = FNBindI64(dl.sym_opt(handle, 'duckdb_bind_int64') or { unsafe { nil } })
-const native_bind_uint64 = FNBindU64(dl.sym_opt(handle, 'duckdb_bind_uint64') or { unsafe { nil } })
-const native_bind_double = FNBindF64(dl.sym_opt(handle, 'duckdb_bind_double') or { unsafe { nil } })
-const native_bind_varchar_length = FNBindVarcharLength(dl.sym_opt(handle,
-	'duckdb_bind_varchar_length') or { unsafe { nil } })
-const native_bind_blob = FNBindBlob(dl.sym_opt(handle, 'duckdb_bind_blob') or { unsafe { nil } })
-const native_bind_null = FNBindNull(dl.sym_opt(handle, 'duckdb_bind_null') or { unsafe { nil } })
-const native_execute_prepared = FNExecutePrepared(dl.sym_opt(handle, 'duckdb_execute_prepared') or {
-	unsafe { nil }
-})
-const native_value_is_null = FNValueNull(dl.sym_opt(handle, 'duckdb_value_is_null') or {
-	unsafe { nil }
-})
-const native_value_uint64 = FNValueU64(dl.sym_opt(handle, 'duckdb_value_uint64') or {
-	unsafe { nil }
-})
-const native_value_blob = FNValueBlob(dl.sym_opt(handle, 'duckdb_value_blob') or { unsafe { nil } })
-const native_rows_changed = FNCount(dl.sym_opt(handle, 'duckdb_rows_changed') or { unsafe { nil } })
+const duckdb_value_boolean = FNValueBoolean(load_duckdb_symbol('duckdb_value_boolean'))
+const duckdb_value_int8 = FNValueInt8(load_duckdb_symbol('duckdb_value_int8'))
+const duckdb_value_int16 = FNValueInt16(load_duckdb_symbol('duckdb_value_int16'))
+const duckdb_value_int32 = FNValueInt32(load_duckdb_symbol('duckdb_value_int32'))
+const duckdb_value_int64 = FNValueInt64(load_duckdb_symbol('duckdb_value_int64'))
+const duckdb_value_float = FNValueFloat(load_duckdb_symbol('duckdb_value_float'))
+const duckdb_value_double = FNValueDouble(load_duckdb_symbol('duckdb_value_double'))
+const duckdb_value_varchar = FNValueVarchar(load_duckdb_symbol('duckdb_value_varchar'))
+const duckdb_value_str = FNValueString(load_duckdb_symbol('duckdb_value_string'))
+const duckdb_value_hugeint = FNValueHugeInt(load_duckdb_symbol('duckdb_value_hugeint'))
+const duckdb_hugeint_to_double = FNValueHugeIntToDouble(load_duckdb_symbol('duckdb_hugeint_to_double'))
+const duckdb_value_decimal = FNValueDecimal(load_duckdb_symbol('duckdb_value_decimal'))
+const duckdb_value_dt = FNValueDate(load_duckdb_symbol('duckdb_value_date'))
+const duckdb_value_time = FNValueTime(load_duckdb_symbol('duckdb_value_time'))
+const duckdb_value_timestamp = FNValueTimestamp(load_duckdb_symbol('duckdb_value_timestamp'))
+const duckdb_value_interval = FNValueInterval(load_duckdb_symbol('duckdb_value_interval'))
+const duckdb_result_error = FNResultError(load_duckdb_symbol('duckdb_result_error'))
+const duckdb_free = FNVoidPtr(load_duckdb_symbol('duckdb_free'))
+const duckdb_lib_version = FNVersion(load_duckdb_symbol('duckdb_library_version'))
+const native_prepare = FNPrepare(load_duckdb_symbol('duckdb_prepare'))
+const native_destroy_prepare = FNDestroyPrepare(load_duckdb_symbol('duckdb_destroy_prepare'))
+const native_prepare_error = FNPrepareError(load_duckdb_symbol('duckdb_prepare_error'))
+const native_nparams = FNNparams(load_duckdb_symbol('duckdb_nparams'))
+const native_bind_parameter_index = FNBindParameterIndex(load_duckdb_symbol('duckdb_bind_parameter_index'))
+const native_bind_boolean = FNBindBoolean(load_duckdb_symbol('duckdb_bind_boolean'))
+const native_bind_int64 = FNBindI64(load_duckdb_symbol('duckdb_bind_int64'))
+const native_bind_uint64 = FNBindU64(load_duckdb_symbol('duckdb_bind_uint64'))
+const native_bind_double = FNBindF64(load_duckdb_symbol('duckdb_bind_double'))
+const native_bind_varchar_length = FNBindVarcharLength(load_duckdb_symbol('duckdb_bind_varchar_length'))
+const native_bind_blob = FNBindBlob(load_duckdb_symbol('duckdb_bind_blob'))
+const native_bind_null = FNBindNull(load_duckdb_symbol('duckdb_bind_null'))
+const native_execute_prepared = FNExecutePrepared(load_duckdb_symbol('duckdb_execute_prepared'))
+const native_value_is_null = FNValueNull(load_duckdb_symbol('duckdb_value_is_null'))
+const native_value_uint64 = FNValueU64(load_duckdb_symbol('duckdb_value_uint64'))
+const native_value_blob = FNValueBlob(load_duckdb_symbol('duckdb_value_blob'))
+const native_rows_changed = FNCount(load_duckdb_symbol('duckdb_rows_changed'))
 
 // duckdb_value_string retrieves a VARCHAR value from a query result.
 // Returns 'NULL' if the value is nil.
